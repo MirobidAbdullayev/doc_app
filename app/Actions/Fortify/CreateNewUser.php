@@ -3,6 +3,8 @@
 namespace App\Actions\Fortify;
 
 use App\Models\User;
+use App\Models\Doctor;
+use App\Models\UserDetails;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
@@ -30,21 +32,14 @@ class CreateNewUser implements CreatesNewUsers
         $user = User::create([
             'name' => $input['name'],
             'email' => $input['email'],
-            'type'  => $input['type'],
+            'type'  => 'doctor',
             'password' => Hash::make($input['password']),
         ]);
 
-        if($input['type'] == 'doctor'){
-            $doctorInfo = Doctor::create([
-                'doc_id' => $user->id,
-                'status' => 'active',
-            ]);
-        }else if($input['type'] == 'user'){
-            $UserInfo = UserDetails::create([
-                'user_id' => $user->id,
-                'status' => 'active',
-            ]);
-        }
+        $doctorInfo = Doctor::create([
+            'doc_id' => $user->id,
+            'status' => 'active',
+        ]);
 
         return $user;
     }
