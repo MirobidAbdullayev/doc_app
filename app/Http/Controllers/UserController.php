@@ -50,6 +50,31 @@ class UserController extends Controller
         return $user->createToken($reqeust->email)->plainTextToken;
     }
 
+    public function register(Request $reqeust)
+    {
+        //validate incoming inputs
+        $reqeust->validate([
+            'name' => 'required|string',
+            'email'=>'required|email',
+            'password'=>'required',
+        ]);
+
+        $user = User::create([
+            'name' => $reqeust->name,
+            'email' => $reqeust->email,
+            'type' => 'user',
+            'password' => Hash::make($reqeust->password),
+        ]);
+
+        $userInfo = UserDetails::create([
+            'user_id' => $user->id,
+            'status' => 'active',
+        ]);
+
+        return $user;
+
+    }
+
     /**
      * Show the form for creating a new resource.
      *
