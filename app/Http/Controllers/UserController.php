@@ -20,7 +20,22 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        $user = array();
+        $user = Auth::user();
+        $doctor = User::where('type', 'doctor')->get();
+        $doctorData = Doctor::all();
+
+        foreach($doctorData as $data){
+            foreach($doctor as $info){
+                if($data['doc_id'] == $info['id']){
+                    $data['doctor_name'] = $info['name'];
+                    $data['doctor_profile'] = $info['profile_photo_url'];
+                }
+            }
+        }
+
+        $user['doctor'] = $doctorData;
+        return $user; 
     }
 
     /**
