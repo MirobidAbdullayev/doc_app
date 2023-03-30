@@ -21,4 +21,6 @@ Route::post('/register', [UserController::class, 'register']);
 
 Route::middleware('auth:sanctum')->group(function(){
     Route::get('/user', [UserController::class, 'index']);
+    Route::post('/book', [AppointmentsController::class, 'store']);
+    Route::get('/appointments', [AppointmentsController::class, 'index']);
 });
