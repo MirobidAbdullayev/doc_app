@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Appointments;
+use App\Models\Reviews;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DocsController extends Controller
 {
@@ -13,7 +16,13 @@ class DocsController extends Controller
      */
     public function index()
     {
-        //
+        //get doctor's appointment, patients and display on dashboard
+        $doctor = Auth::user();
+        $appointments = Appointments::where('doc_id', $doctor->id)->where('status', 'upcoming')->get();
+        $reviews = Reviews::where('doc_id', $doctor->id)->where('status', 'active')->get();
+
+        //return all data to dashboard
+        return view('dashboard')->with(['doctor'=>$doctor, 'appointments'=>$appointments, 'reviews'=>$reviews]);
     }
 
     /**
